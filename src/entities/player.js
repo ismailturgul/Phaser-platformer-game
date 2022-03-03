@@ -1,5 +1,8 @@
 import Phaser from "phaser";
 import initAnimations from "./playerAnims";
+import Collidable from "../mixins/collidable";
+import collidable from "../mixins/collidable";
+
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
@@ -7,8 +10,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
 
+    Object.assign(this, collidable);
     this.init();
     this.initEvents();
   }
@@ -56,7 +59,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     onFloor ? 
     this.body.velocity.x !== 0 ? this.play("run", true) : this.play("idle", true):
     this.play("jump", true)
-  }
+    }
 }
 
 export default Player;
