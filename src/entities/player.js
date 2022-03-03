@@ -9,6 +9,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
 
     this.init();
+    this.initEvents();
   }
   init() {
     this.gravity = 500;
@@ -17,8 +18,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.setCollideWorldBounds(true);
   }
 
-  preUpdate(time, delta) {
-    super.preUpdate(time, delta)
+  initEvents(){
+      this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this)
+  }
+
+  preUpdate() {
+
     const { left, right } = this.cursors;
 
     if (left.isDown) {
