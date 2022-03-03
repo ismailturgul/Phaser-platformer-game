@@ -14,18 +14,28 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   init() {
     this.gravity = 500;
     this.playerSpeed = 200;
+    this.cursors = this.scene.input.keyboard.createCursorKeys();
+
     this.body.setGravityY(500);
     this.setCollideWorldBounds(true);
+
+    this.scene.anims.create({
+      key: "run",
+      frames: this.scene.anims.generateFrameNumbers("player", {
+        start: 11,
+        end: 16,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
   }
 
-  initEvents(){
-      this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this)
+  initEvents() {
+    this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
   }
 
-  preUpdate() {
-
+  update() {
     const { left, right } = this.cursors;
-
     if (left.isDown) {
       this.setVelocityX(-this.playerSpeed);
     } else if (right.isDown) {
@@ -33,6 +43,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.setVelocityX(0);
     }
+
+    this.play("run", true);
   }
 }
 
