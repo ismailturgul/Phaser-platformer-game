@@ -7,9 +7,9 @@
          "height":40,
          "id":3,
          "name":"platforms_colliders",
-         "opacity":1,
+         "opacity":0,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":100,
          "x":0,
          "y":0
@@ -37,9 +37,44 @@
          "width":100,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":4,
+         "name":"player_zones",
+         "objects":[
+                {
+                 "height":0,
+                 "id":1,
+                 "name":"startZone",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":83,
+                 "y":271
+                }, 
+                {
+                 "height":0,
+                 "id":2,
+                 "name":"endZone",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":521,
+                 "y":172
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":1,
+ "nextlayerid":5,
+ "nextobjectid":3,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.2",
