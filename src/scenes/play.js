@@ -48,6 +48,7 @@ class Play extends Phaser.Scene {
   }
   setupFollowupCameraOn(player){
     const { height, width, mapOffset } = this.config;
+    this.physics.world.setBounds(0, 0, width + mapOffset, height);
     this.cameras.main.setBounds(0,0, width + mapOffset, height);
     this.cameras.main.startFollow(player);
   }
