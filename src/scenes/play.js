@@ -47,9 +47,9 @@ class Play extends Phaser.Scene {
     player.addCollider(colliders.platformColliders);
   }
   setupFollowupCameraOn(player){
-    const { height, width, mapOffset } = this.config;
-    this.physics.world.setBounds(0, 0, width + mapOffset, height);
-    this.cameras.main.setBounds(0,0, width + mapOffset, height);
+    const { height, width, mapOffset, zommFactor } = this.config;
+    this.physics.world.setBounds(0, 0, width + mapOffset, height + 100);
+    this.cameras.main.setBounds(0,0, width + mapOffset, height).setZoom(zommFactor);
     this.cameras.main.startFollow(player);
   }
 }
