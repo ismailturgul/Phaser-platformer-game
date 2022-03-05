@@ -10,15 +10,16 @@ class Play extends Phaser.Scene {
   create() {
     const map = this.createMap();
     const layers = this.createLayers(map);
-    const player = this.createPlayer();
+    const playerZones = this.getPlayerZones(layers.playerZones);
+    const player = this.createPlayer(playerZones);
 
-    this.createPlayerColliders(player, {colliders: {
-      platformColliders: layers.platformColliders
-    }
-  });
+    this.createPlayerColliders(player, {
+      colliders: {
+        platformColliders: layers.platformColliders,
+      },
+    });
 
-
-  this.setupFollowupCameraOn(player);
+    this.setupFollowupCameraOn(player);
   }
 
   createMap() {
@@ -34,23 +35,32 @@ class Play extends Phaser.Scene {
     );
     const environment = map.createStaticLayer("environment", tileset);
     const platforms = map.createStaticLayer("platforms", tileset);
-    const playerZones = map.getObjectLayer('player_zones').objects;
+    const playerZones = map.getObjectLayer("player_zones");
     platformColliders.setCollisionByProperty({ collides: true }, -1, true);
 
-    return { environment, platforms, platformColliders };
+    return { environment, platforms, platformColliders, playerZones };
   }
 
-  createPlayer() {
-    return new Player(this,100,250);
+  createPlayer({start}) {
+    return new Player(this, start.x, start.y);
   }
-  createPlayerColliders(player, { colliders }){
+  createPlayerColliders(player, { colliders }) {
     player.addCollider(colliders.platformColliders);
   }
-  setupFollowupCameraOn(player){
+  setupFollowupCameraOn(player) {
     const { height, width, mapOffset, zommFactor } = this.config;
     this.physics.world.setBounds(0, 0, width + mapOffset, height + 100);
-    this.cameras.main.setBounds(0,0, width + mapOffset, height).setZoom(zommFactor);
+    this.cameras.main
+      .setBounds(0, 0, width + mapOffset, height)
+      .setZoom(zommFactor);
     this.cameras.main.startFollow(player);
+  }
+  getPlayerZones(playerZonesLayer) {
+    const playerZones = playerZonesLayer.objects;
+    return {
+      start: playerZones.find((zone) => zone.name === "startZone"),
+      end: playerZones.find((zone) => zone.name === "endZone"),
+    };
   }
 }
 
