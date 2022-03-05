@@ -9,13 +9,11 @@ class Play extends Phaser.Scene {
   create() {
     const map = this.createMap();
     const layers = this.createLayers(map);
-
     const player = this.createPlayer();
-    
-    this.createPlayerColliders(player, {
-        colliders: {
-        platformColliders = layers.platformColliders
-    }});
+
+    player.addCollider(layers.platformColliders)
+
+   
   }
 
   createMap() {
