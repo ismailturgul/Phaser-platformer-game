@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import Player from "../entities/player";
-import { getEnemyTypes } from "../types/index";
+import Enemies from "../groups/Enemies";
 
 class Play extends Phaser.Scene {
   constructor(config) {
@@ -60,22 +60,36 @@ class Play extends Phaser.Scene {
   createPlayer(start) {
     return new Player(this, start.x, start.y);
   }
+
+
+
   createEnemies(spawnLayer) {
-    const enemyTypes = getEnemyTypes();
-    return spawnLayer.objects.map((spawnPoint) => {
-      return new enemyTypes[spawnPoint.type](this, spawnPoint.x, spawnPoint.y);
+    const enemies = new Enemies(this);
+    const enemyTypes = enemies.getTypes();
+    spawnLayer.objects.forEach((spawnPoint) => {
+      const enemy = new enemyTypes[spawnPoint.type](
+        this,
+        spawnPoint.x,
+        spawnPoint.y
+      );
+      enemies.add(enemy);
     });
+
+    return enemies;
   }
+
+
   createPlayerColliders(player, { colliders }) {
     player.addCollider(colliders.platformColliders);
   }
+
+
   createEnemyColliders(enemies, { colliders }) {
-    enemies.forEach((enemy) => {
-      enemy
+    enemies
         .addCollider(colliders.platformColliders)
         .addCollider(colliders.player); // enemy collides with player
-    });
-  }
+    };
+  
 
   setupFollowupCameraOn(player) {
     const { height, width, mapOffset, zoomFactor } = this.config;
@@ -85,6 +99,8 @@ class Play extends Phaser.Scene {
       .setZoom(zoomFactor);
     this.cameras.main.startFollow(player);
   }
+
+
   getPlayerZones(playerZonesLayer) {
     const playerZones = playerZonesLayer.objects;
     return {
