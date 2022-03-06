@@ -13,14 +13,14 @@ class Play extends Phaser.Scene {
     const layers = this.createLayers(map);
     const playerZones = this.getPlayerZones(layers.playerZones);
     const player = this.createPlayer(playerZones.start);
-    const enemy = this.createEnemy();
+    const enemies = this.createEnemies(layers.enemySpawns);
 
     this.createPlayerColliders(player, {
       colliders: {
         platformColliders: layers.platformColliders,
       },
     });
-    this.createEnemyColliders(enemy, {
+    this.createEnemyColliders(enemies, {
       colliders: {
         platformColliders: layers.platformColliders,
         player, // create the function to collide with the player
@@ -42,27 +42,38 @@ class Play extends Phaser.Scene {
       "platforms_colliders",
       tileset
     );
+    const enemySpawns = map.getObjectLayer("enemy_spawns");
     const environment = map.createStaticLayer("environment", tileset);
     const platforms = map.createStaticLayer("platforms", tileset);
     const playerZones = map.getObjectLayer("player_zones");
     platformColliders.setCollisionByProperty({ collides: true }, -1, true);
 
-    return { environment, platforms, platformColliders, playerZones };
+    return {
+      environment,
+      platforms,
+      platformColliders,
+      playerZones,
+      enemySpawns,
+    };
   }
 
   createPlayer(start) {
     return new Player(this, start.x, start.y);
   }
-  createEnemy() {
-    return new Birdman(this, 200, 200);
+  createEnemies(spawnLayer) {
+    return spawnLayer.objects.map((spawnPoint) => {
+      return new Birdman(this, spawnPoint.x, spawnPoint.y);
+    });
   }
   createPlayerColliders(player, { colliders }) {
     player.addCollider(colliders.platformColliders);
   }
-  createEnemyColliders(enemy, { colliders }) {
-    enemy
-      .addCollider(colliders.platformColliders)
-      .addCollider(colliders.player); // enemy collides with player
+  createEnemyColliders(enemies, { colliders }) {
+    enemies.forEach((enemy) => {
+      enemy
+        .addCollider(colliders.platformColliders)
+        .addCollider(colliders.player); // enemy collides with player
+    });
   }
 
   setupFollowupCameraOn(player) {
