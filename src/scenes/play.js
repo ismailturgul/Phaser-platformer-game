@@ -29,6 +29,24 @@ class Play extends Phaser.Scene {
 
     this.createEndOfLevel(playerZones.end, player);
     this.setupFollowupCameraOn(player);
+
+    this.graphics = this.add.graphics();
+    this.line = new Phaser.Geom.Line();
+    this.graphics.lineStyle(1, 0x00ff00);
+
+    this.input.on("pointerdown", this.startDrawing, this);
+    this.input.on("pointerup", this.finishDrawing, this);
+  }
+
+  startDrawing(pointer) {
+    this.line.x1 = pointer.worldX;
+    this.line.y1 = pointer.worldY;
+  }
+  finishDrawing(pointer) {
+    this.line.x2 = pointer.worldX;
+    this.line.y2 = pointer.worldY;
+
+    this.graphics.strokeLineShape(this.line);
   }
 
   createMap() {
@@ -61,8 +79,6 @@ class Play extends Phaser.Scene {
     return new Player(this, start.x, start.y);
   }
 
-
-
   createEnemies(spawnLayer) {
     const enemies = new Enemies(this);
     const enemyTypes = enemies.getTypes();
@@ -78,18 +94,15 @@ class Play extends Phaser.Scene {
     return enemies;
   }
 
-
   createPlayerColliders(player, { colliders }) {
     player.addCollider(colliders.platformColliders);
   }
 
-
   createEnemyColliders(enemies, { colliders }) {
     enemies
-        .addCollider(colliders.platformColliders)
-        .addCollider(colliders.player); // enemy collides with player
-    };
-  
+      .addCollider(colliders.platformColliders)
+      .addCollider(colliders.player); // enemy collides with player
+  }
 
   setupFollowupCameraOn(player) {
     const { height, width, mapOffset, zoomFactor } = this.config;
@@ -99,7 +112,6 @@ class Play extends Phaser.Scene {
       .setZoom(zoomFactor);
     this.cameras.main.startFollow(player);
   }
-
 
   getPlayerZones(playerZonesLayer) {
     const playerZones = playerZonesLayer.objects;
