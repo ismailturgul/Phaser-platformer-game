@@ -23,6 +23,7 @@ class Play extends Phaser.Scene {
     this.createEnemyColliders(enemy, {
       colliders: {
         platformColliders: layers.platformColliders,
+        player, // create the function to collide with the player
       },
     });
 
@@ -59,7 +60,9 @@ class Play extends Phaser.Scene {
     player.addCollider(colliders.platformColliders);
   }
   createEnemyColliders(enemy, { colliders }) {
-    enemy.addCollider(colliders.platformColliders);
+    enemy
+      .addCollider(colliders.platformColliders)
+      .addCollider(colliders.player); // enemy collides with player
   }
 
   setupFollowupCameraOn(player) {
