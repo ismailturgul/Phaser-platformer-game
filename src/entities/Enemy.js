@@ -43,10 +43,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     const { x, y, width, halfHeight } = body;
     const line = new Phaser.Geom.Line();
 
-    line.x1 = 0;
-    line.y1 = 0;
-    line.x2 = 0;
-    line.y2 = 0;
+    line.x1 = x + width;
+    line.y1 = y + halfHeight;
+    line.x2 = line.x1 + raylength;
+    line.y2 = line.y1 + raylength;
 
     return line;
   }
